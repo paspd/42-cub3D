@@ -6,7 +6,7 @@
 /*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 15:36:08 by ldauga            #+#    #+#             */
-/*   Updated: 2021/03/15 13:09:10 by leodauga         ###   ########.fr       */
+/*   Updated: 2021/03/18 14:11:39 by leodauga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ typedef	struct	s_texture
 	
 	double	coef_y;
 	double	coef_x;
-	int		texture_pos;
+	double	texture_pos;
 	double	sky_coef_x;
 	double	sky_coef_y;
 	int		x;
@@ -103,6 +103,8 @@ typedef	struct s_sky
     int         endian;
 	int			width;
 	int			height;
+	double		coef_x;
+	double		coef_y;
 }				t_sky;
 
 typedef	struct s_floor
@@ -171,6 +173,12 @@ typedef struct	s_verif
 	int		img;
 	int		speed_hack;
 	int		screen_shoot;
+	int		shadow;
+	char	*coord;
+	int		old_map_x;
+	int		old_map_y;
+	int		black_col;
+	int		side;
 }				t_verif;
 
 typedef	struct s_base

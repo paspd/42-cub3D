@@ -54,6 +54,7 @@ SRCS_FILES	=	convert/ft_atoi.c \
 				malloc/ft_bzero.c \
 				malloc/ft_calloc.c \
 				ft_str/ft_strlcat.c \
+				ft_str/ft_strcat.c \
 				ft_str/ft_strlen.c \
 				ft_str/ft_strncmp.c \
 				ft_str/ft_strlcpy.c \

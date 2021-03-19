@@ -6,7 +6,7 @@
 /*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 16:28:25 by ldauga            #+#    #+#             */
-/*   Updated: 2021/02/18 15:04:55 by leodauga         ###   ########.fr       */
+/*   Updated: 2021/03/18 10:27:36 by leodauga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,6 +74,8 @@ char			**ft_split(char *str, char charset);
 char			*ft_strmapi(char *s, char (*f)(unsigned int, char));
 char			*ft_strnstr(char *str, char *to_find, size_t len);
 int				ft_strnchr(char *str, int c, size_t n);
+char    		*ft_strcat(char *s1, char *s2);
+char    		*ft_strcatchar(char *s1, int c);
 
 int				ft_tolower(int c);
 int				ft_toupper(int c);

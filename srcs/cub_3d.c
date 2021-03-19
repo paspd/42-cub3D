@@ -6,7 +6,7 @@
 /*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 12:00:33 by ldauga            #+#    #+#             */
-/*   Updated: 2021/03/15 16:07:31 by leodauga         ###   ########.fr       */
+/*   Updated: 2021/03/19 10:00:09 by leodauga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -844,24 +844,28 @@ void	select_texture(t_cub *cub)
 		cub->tex.addr = cub->we.addr;
 		cub->tex.height = cub->we.height;
 		cub->tex.width = cub->we.width;
+		cub->verif.side = 0;
 	}
 	else if (cub->verif.wall_side && cub->map.y > cub->player.y)
 	{
 		cub->tex.addr = cub->ea.addr;
 		cub->tex.height = cub->ea.height;
 		cub->tex.width = cub->ea.width;
+		cub->verif.side = 1;
 	}
 	else if (!cub->verif.wall_side && cub->map.x < cub->player.x)
 	{
 		cub->tex.addr = cub->no.addr;
 		cub->tex.height = cub->no.height;
 		cub->tex.width = cub->no.width;
+		cub->verif.side = 2;
 	}
 	else if (!cub->verif.wall_side && cub->map.x > cub->player.x)
 	{
 		cub->tex.addr = cub->so.addr;
 		cub->tex.height = cub->so.height;
 		cub->tex.width = cub->so.width;
+		cub->verif.side = 3;
 	}
 }
 
@@ -882,15 +886,19 @@ void	check_4_texture(t_cub *cub)
 
 void	draw_vertical_line(int x, int y_min, int y_max, t_cub *cub)
 {
-
 	int		i;
+	int 	color;
 
 	i = 0;
-	double step = (double)cub->tex.height / cub->draw.wall_height;
-	double texPos = (cub->draw.draw_start - cub->wind.height / 2 + cub->draw.wall_height / 2) * step;
+	if (cub->verif.old_map_x != cub->map.x || cub->verif.old_map_y != cub->map.y || cub->verif.side != cub->verif.old_side)
+		cub->verif.black = 1;
+	else
+		cub->verif.black = 0;
+	cub->texture.coef_y = (double)cub->tex.height / cub->draw.wall_height;
+	cub->texture.texture_pos = (cub->draw.draw_start - cub->wind.height / 2 + cub->draw.wall_height / 2) * cub->texture.coef_y;
 	while (i < y_min)
 	{
-		cub->rci.addr[i * cub->rci.line_length + x] = cub->sky.color;
+		cub->rci.addr[i * cub->rci.line_length + x] = cub->sky.addr[i * cub->sky.width + x];
 		i++;
 	}
 	if (y_min != 0)
@@ -900,9 +908,12 @@ void	draw_vertical_line(int x, int y_min, int y_max, t_cub *cub)
 	}
 	while (y_min <= y_max)
 	{
-		cub->texture.y = (int)texPos & (cub->tex.height - 1);
-		texPos += step;
-		cub->rci.addr[y_min * cub->rci.line_length + x] = cub->tex.addr[cub->texture.y * cub->tex.height + cub->texture.x];
+		cub->texture.y = (int)cub->texture.texture_pos & (cub->tex.height - 1);
+		cub->texture.texture_pos += cub->texture.coef_y;
+		color = cub->tex.addr[cub->texture.y * cub->tex.height + cub->texture.x];
+		if (cub->verif.black)
+			color = 0;
+		cub->rci.addr[y_min * cub->rci.line_length + x] = color;
 		y_min++;
 	}
 	y_max++;
@@ -913,6 +924,9 @@ void	draw_vertical_line(int x, int y_min, int y_max, t_cub *cub)
 	}
 	while (y_max < cub->wind.height)
 		cub->rci.addr[y_max++ * cub->rci.line_length + x] = cub->floor.color;
+	cub->verif.old_map_x = cub->map.x;
+	cub->verif.old_map_y = cub->map.y;
+	cub->verif.old_side = cub->verif.side;
 }
 
 void	draw(t_cub *cub, int x)
@@ -1216,6 +1230,10 @@ void	init_final_img(t_cub *cub)
 	if (!cub->rci.addr)
 		error("MLX error.\n", cub);
 	cub->rci.line_length /= 4;
+	cub->sky.img = mlx_xpm_file_to_image(cub->mlx.id, "./textures/ciel_3.xpm", &cub->sky.width, &cub->sky.height);
+	if (!cub->sky.img)
+		error("MLX error.\n", cub);
+	cub->sky.addr = (int *)mlx_get_data_addr(cub->sky.img, &cub->sky.bits_per_pixel, &cub->sky.line_length, &cub->sky.endian);
 }
 
 void	init_img(t_cub *cub)
