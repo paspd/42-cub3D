@@ -6,7 +6,7 @@
 /*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 12:00:33 by ldauga            #+#    #+#             */
-/*   Updated: 2021/03/19 10:00:09 by leodauga         ###   ########.fr       */
+/*   Updated: 2021/03/22 11:40:05 by leodauga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -371,28 +371,36 @@ void	clean_map(t_cub *cub)
 
 int	parsing_map_3(t_cub *cub)
 {
-	int	i;
-	int	n;
+	int	x;
+	int	y;
 
-	i = 0;
-	while (cub->map.tab_map[i])
+	y = 0;
+	while (cub->map.tab_map[y])
 	{
-		n = 0;
-		while (cub->map.tab_map[i][n])
+		x = 0;
+		while (cub->map.tab_map[y][x])
 		{
-			if (ft_ischar("NSEW", cub->map.tab_map[i][n]))
+			if (cub->map.tab_map[y][x] == '2')
+			{
+				cub->sprite.pos_x[cub->sprite.nb_sprite] = x;
+				cub->sprite.pos_y[cub->sprite.nb_sprite] = y;
+				cub->sprite.nb_sprite++;
+			}
+			if (ft_ischar("NSEW", cub->map.tab_map[y][x]))
 			{
 				if (cub->verif.spawn)
 					error("There is many spawn point.\n", cub);
-				cub->player.spawn_direction = cub->map.tab_map[i][n];
-				cub->player.y = i + 0.5;
-				cub->player.x = n + 0.5;
+				cub->player.spawn_direction = cub->map.tab_map[y][x];
+				cub->player.y = y + 0.5;
+				cub->player.x = x + 0.5;
 				cub->verif.spawn++;
 			}
-			n++;
+			x++;
 		}
-		i++;
+		y++;
 	}
+	// cub->sprite.pos_x[cub->sprite.nb_sprite] = 0;
+	// cub->sprite.pos_y[0] = 0;
 	if (!cub->verif.spawn)
 		error("There is no spawn point.\n", cub);
 	fill_flood_map(cub, cub->player.y, cub->player.x);
@@ -1096,6 +1104,70 @@ void	check_direction(t_cub *cub)
 	mlx_string_put(cub->mlx.id, cub->wind.id, cub->wind.width / 2, cub->wind.height * 0.05, 0x00FFFFFF - cub->sky.color, dir);
 }
 
+void	draw_sprites(t_cub *cub, int s_screen)
+{
+	int	y_min;
+	int	y_max;
+	int	x_min;
+	int	x_max;
+	
+	y_min = cub->sprite.draw_start_y;
+	y_max = cub->sprite.draw_end_y;
+	x_max = cub->sprite.draw_end_x;
+	while (y_min < y_max)
+	{
+		cub->sprite.y = (int)(y_min - (-cub->s_img.width / 2 + s_screen) * cub->s_img.line_length / cub->s_img.width);
+		x_min = cub->sprite.draw_start_x;
+		while (x_min < x_max)
+		{
+			int d = x_min - cub->wind.height + cub->s_img.height;
+			cub->sprite.x = ((d * cub->s_img.line_length) / cub->s_img.height);
+			cub->rci.addr[y_min * cub->rci.line_length + x_min] = cub->s_img.addr[cub->sprite.y * cub->s_img.width + cub->sprite.x];
+			x_min++;
+		}
+		y_min++;
+	}
+}
+
+void	aff_sprite(t_cub *cub)
+{
+	int	i;
+	double	s_x;
+	double	s_y;
+	double	real_x;
+	double	real_y;
+	int		s_screen;
+	int		s_h;
+	int		s_w;
+
+	i = 0;
+	while (i < cub->sprite.nb_sprite)
+	{
+		s_x = cub->sprite.pos_x[i] - cub->player.x;
+		s_y = cub->sprite.pos_y[i] - cub->player.y;
+		cub->sprite.corec_coef = 1.0 / (cub->rc.plane_x * cub->rc.dir_y - cub->rc.dir_x * cub->rc.plane_y);
+		real_x = cub->sprite.corec_coef * (cub->rc.dir_y * s_x - cub->rc.dir_x * s_y);
+		real_y = cub->sprite.corec_coef * (-cub->rc.plane_y * s_x + cub->rc.plane_x * s_y);
+		s_screen = (int)(cub->wind.width / 2 * (1 + real_x / real_y));
+		s_h = abs((int)(cub->wind.height / real_y));
+		cub->sprite.draw_start_y = -s_h / 2 + cub->wind.height / 2;
+		if (cub->sprite.draw_start_y < 0)
+			cub->sprite.draw_start_y = 0;
+		cub->sprite.draw_end_y = s_h / 2 + cub->wind.height / 2;
+		if (cub->sprite.draw_end_y >= cub->wind.width)
+			cub->sprite.draw_end_y = cub->wind.height - 1;
+		s_w = abs((int)(cub->wind.width / real_x));
+		cub->sprite.draw_start_x = -s_w / 2 + s_screen;
+		if (cub->sprite.draw_start_x < 0)
+		  cub->sprite.draw_start_x = 0;
+		cub->sprite.draw_end_x = s_w / 2 + s_screen;
+		if (cub->sprite.draw_end_x >= cub->wind.width)
+			cub->sprite.draw_end_x = cub->wind.width - 1;
+		draw_sprites(cub, s_screen);		
+		i++;
+	}
+}
+
 int	raycasting(t_cub *cub)
 {
 	int x;
@@ -1120,6 +1192,7 @@ int	raycasting(t_cub *cub)
 			draw(cub, x);
 			x++;
 		}
+		aff_sprite(cub);
 		aff_map_wind(cub);
 		mlx_put_image_to_window(cub->mlx.id, cub->wind.id, cub->rci.img, 0, 0);
 		check_direction(cub);
@@ -1221,6 +1294,15 @@ void	init_no(t_cub *cub)
 	cub->no.line_length /= 4;
 }
 
+void	init_sprite(t_cub *cub)
+{
+	cub->s_img.img = mlx_xpm_file_to_image(cub->mlx.id, cub->texture.texture_sprite, &cub->s_img.width, &cub->s_img.height);
+	if (!cub->s_img.img)
+		error("The sprite texture file path is'n valid.\n", cub);
+	cub->s_img.addr = (int *)mlx_get_data_addr(cub->s_img.img, &cub->s_img.bits_per_pixel, &cub->s_img.line_length, &cub->s_img.endian);
+	cub->s_img.line_length /= 4;
+}
+
 void	init_final_img(t_cub *cub)
 {
 	cub->rci.img = mlx_new_image(cub->mlx.id, cub->wind.width, cub->wind.height);
@@ -1243,6 +1325,7 @@ void	init_img(t_cub *cub)
 	init_so(cub);
 	init_we(cub);
 	init_ea(cub);
+	init_sprite(cub);
 }
 
 void	start_graphic(t_cub	*cub)

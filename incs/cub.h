@@ -6,7 +6,7 @@
 /*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 15:36:08 by ldauga            #+#    #+#             */
-/*   Updated: 2021/03/18 14:11:39 by leodauga         ###   ########.fr       */
+/*   Updated: 2021/03/22 11:31:07 by leodauga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,6 +159,21 @@ typedef struct	s_file
 	int		file_fd;
 }				t_file;
 
+typedef struct s_sprite
+{
+	int 	pos_x[500];
+	int		pos_y[500];
+	int		nb_sprite;
+	double	corec_coef;
+	int		draw_start_y;
+	int		draw_end_y;
+	int		draw_start_x;
+	int		draw_end_x;
+	int		y;
+	int		x;
+}				t_sprite;
+
+
 typedef struct	s_verif
 {
 	int		pars;
@@ -209,6 +224,8 @@ typedef struct	s_cub
 	t_xpm_img	we;
 	t_xpm_img	ea;
 	t_xpm_img	so;
+	t_xpm_img	s_img;
+	t_sprite	sprite;
 }				t_cub;
 
 #endif
