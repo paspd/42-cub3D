@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_convert_base_utilis.c                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/02/10 12:59:31 by leodauga          #+#    #+#             */
-/*   Updated: 2021/02/10 13:00:54 by leodauga         ###   ########.fr       */
+/*   Created: 2021/03/23 09:22:59 by ldauga            #+#    #+#             */
+/*   Updated: 2021/03/23 09:23:00 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/libft.h"
 
-int		ft_len(int nbr, char *base)
+int	ft_len(int nbr, char *base)
 {
 	int			len;
 	int			i;
@@ -58,7 +58,8 @@ char	*retour(int nbr, char *base_to)
 	char	*retour;
 
 	i = ft_len(nbr, base_to);
-	if (!(retour = (char *)malloc(sizeof(char) * (i + 1))))
+	retour = (char *)malloc(sizeof(char) * (i + 1));
+	if (!retour)
 		return (0);
 	ft_putnbr_base(nbr, base_to, retour, i - 1);
 	retour[i] = 0;

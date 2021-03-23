@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 16:22:49 by ldauga            #+#    #+#             */
-/*   Updated: 2021/01/22 15:59:23 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/03/23 09:52:25 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@ t_list	*ft_lstmap(t_list *lst, void *(*f)(void *), void (*del)(void *))
 	christof = 0;
 	while (lst)
 	{
-		if (!(result = ft_lstnew(f(lst->content))))
+		result = ft_lstnew(f(lst->content));
+		if (!result)
 		{
 			ft_lstclear(&lst, del);
 			ft_lstclear(&christof, del);

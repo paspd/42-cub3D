@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 13:49:13 by ldauga            #+#    #+#             */
-/*   Updated: 2021/02/01 13:14:08 by leodauga         ###   ########.fr       */
+/*   Updated: 2021/03/23 09:48:03 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char	*ft_strrchr(char *str, int c)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (str[i])

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 11:01:42 by ldauga            #+#    #+#             */
-/*   Updated: 2021/02/01 13:14:08 by leodauga         ###   ########.fr       */
+/*   Updated: 2021/03/23 09:40:16 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,8 @@ char	*ft_strmapi(char *s, char (*f)(unsigned int, char))
 		return (0);
 	while (s[i])
 		i++;
-	if (!(dest = malloc(sizeof(char) * i + 1)))
+	dest = malloc(sizeof(char) * i + 1);
+	if (!dest)
 		return (0);
 	while (s[y])
 	{

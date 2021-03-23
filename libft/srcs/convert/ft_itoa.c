@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/27 09:10:29 by ldauga            #+#    #+#             */
-/*   Updated: 2021/01/22 15:59:08 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/03/23 09:24:38 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,28 +35,27 @@ static int	ft_intlen(int n)
 	return (len);
 }
 
-char		*ft_itoa(int n)
+char	*ft_itoa(int n)
 {
 	int				length;
-	int				negative;
 	char			*str;
 	unsigned int	nbr;
 
-	negative = (n < 0) ? 1 : 0;
 	length = ft_intlen(n) - 1;
-	if (!(str = (char *)malloc(sizeof(char) * length + 1)))
+	str = (char *)malloc(sizeof(char) * length + 1);
+	if (!str)
 		return (0);
 	if (n == 0)
 		str[0] = '0';
 	str[length] = 0;
-	if (negative)
+	if (n < 0)
 	{
 		str[0] = '-';
 		nbr = -n;
 	}
 	else
 		nbr = n;
-	while (length-- > negative)
+	while (length-- > (n < 0))
 	{
 		str[length] = (nbr % 10) + 48;
 		nbr /= 10;

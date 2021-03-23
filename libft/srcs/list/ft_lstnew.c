@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/30 16:23:22 by ldauga            #+#    #+#             */
-/*   Updated: 2021/01/22 15:59:23 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/03/23 09:52:50 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,10 @@
 
 t_list	*ft_lstnew(void *content)
 {
-	t_list *i;
+	t_list	*i;
 
-	if (!(i = malloc(sizeof(t_list))))
+	i = malloc(sizeof(t_list));
+	if (!i)
 		return (NULL);
 	i->content = content;
 	i->next = NULL;

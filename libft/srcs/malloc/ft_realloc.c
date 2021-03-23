@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 12:32:19 by ldauga            #+#    #+#             */
-/*   Updated: 2021/01/27 12:33:16 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/03/23 09:53:44 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,11 @@
 char	*ft_realloc(char *src, int size)
 {
 	size_t		i;
-	char	*dest;
+	char		*dest;
 
 	i = ft_strlen(src);
-	if (!(dest = (char *)malloc(sizeof(char) * (i + size + 1))))
+	dest = (char *)malloc(sizeof(char) * (i + size + 1));
+	if (!dest)
 		return (0);
 	i = 0;
 	while (src[i])

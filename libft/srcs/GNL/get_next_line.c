@@ -1,104 +1,100 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                              :+:      :+:    :+:   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2020/12/07 12:23:27 by ldauga            #+#    #+#             */
-/*   Updated: 2021/02/02 10:49:46 by leodauga         ###   ########.fr       */
+/*   Created: 2021/03/23 10:03:38 by ldauga            #+#    #+#             */
+/*   Updated: 2021/03/23 10:25:07 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/libft.h"
 
-int		have_return(char *save)
+int	save_check(char *buffer)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	if (!save)
-		return (0);
-	while (save[i])
+	while (i < 1)
 	{
-		if (save[i] == '\n')
-			return (1);
+		if (buffer[i])
+			return (i);
 		i++;
 	}
+	return (-1);
+}
+
+int	process(char **line, char *buffer, int save, int fd)
+{
+	int	len;
+	int	eol;
+
+	eol = 0;
+	while (1)
+	{
+		save = save_check(buffer);
+		len = gnl_ft_strlen(buffer, save);
+		if (buffer[save + len] == '\n')
+			eol = 1;
+		if ((*line)[0] == 0)
+			gnl_ft_strcpy(*line, buffer, len, save);
+		else
+			*line = gnl_ft_strjoin(*line, buffer, len, save);
+		if (*line == NULL)
+			return (-1);
+		if (eol)
+			return (1);
+		if (read(fd, buffer, 1) == 0)
+			return (0);
+	}
+	return (-1);
+}
+
+int	nosave_noread(char **line)
+{
+	*line = malloc(sizeof(char));
+	if (*line == NULL)
+		return (-1);
+	*line[0] = 0;
 	return (0);
 }
 
-char	*get_new_line(char **save, int fd)
+int	mini_calloc(char **line, int len)
 {
-	int		i;
-	char	*temp;
-
-	if (!save)
+	*line = malloc(sizeof(char) * (len + 1));
+	if (*line == NULL)
 		return (0);
-	i = 0;
-	while (save[fd][i] && save[fd][i] != '\n')
-		i++;
-	if (!(temp = gnl_ft_calloc(sizeof(char), (i + 1))))
-		return (0);
-	i = 0;
-	while (save[fd][i] && save[fd][i] != '\n')
-	{
-		temp[i] = save[fd][i];
-		i++;
-	}
-	temp[i] = '\0';
-	return (temp);
-}
-
-char	*get_new_save(char **save, int fd)
-{
-	char	*temp;
-	int		i;
-	int		j;
-
-	j = 0;
-	i = 0;
-	if (!save[fd])
-		return (0);
-	while (save[fd][i] && save[fd][i] != '\n')
-		i++;
-	if (!save[fd][i])
-	{
-		free(save[fd]);
-		return (0);
-	}
-	i++;
-	if (!(temp = gnl_ft_calloc(sizeof(char), (gnl_ft_strlen(save[fd]) - i + 1))))
-		return (0);
-	while (save[fd][i])
-		temp[j++] = save[fd][i++];
-	temp[j] = '\0';
-	free(save[fd]);
-	return (temp);
-}
-
-int		get_next_line(int fd, char **line)
-{
-	static char		*save[4096];
-	char			buff[BUFFER_SIZE + 1];
-	int				reader;
-
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (-1);
-	if (!save[fd])
-		if (!(save[fd] = gnl_ft_calloc(1, 1)))
-			return (-1);
-	reader = 1;
-	while (reader != 0 && !(have_return(save[fd])))
-	{
-		if ((reader = read(fd, buff, BUFFER_SIZE)) == -1)
-			return (-1);
-		buff[reader] = '\0';
-		save[fd] = gnl_ft_strjoin(save[fd], buff);
-	}
-	*line = get_new_line(save, fd);
-	save[fd] = get_new_save(save, fd);
-	if (reader == 0)
-		return (0);
+	(*line)[0] = '\0';
+	(*line)[len] = 0;
 	return (1);
+}
+
+int	get_next_line(int fd, char **line)
+{
+	int			len;
+	int			save;
+	int			z;
+	static char	buffer[OPEN_MAX][1 + 1] = {{0}};
+
+	len = 0;
+	z = 0;
+	*line = NULL;
+	if (fd < 0 || fd >= OPEN_MAX)
+		return (-1);
+	save = save_check(buffer[fd]);
+	if (save == -1)
+		z = read(fd, buffer[fd], 1);
+	if (save == -1 && z == 0)
+		return (nosave_noread(line));
+	save = save_check(buffer[fd]);
+	if (z > 0 || save >= 0)
+	{
+		len = gnl_ft_strlen(buffer[fd], save);
+		if (!(mini_calloc(line, len)))
+			return (-1);
+		z = process(line, buffer[fd], save, fd);
+	}
+	return (z);
 }
