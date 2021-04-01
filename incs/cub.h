@@ -6,7 +6,7 @@
 /*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 15:36:08 by ldauga            #+#    #+#             */
-/*   Updated: 2021/03/22 11:31:07 by leodauga         ###   ########.fr       */
+/*   Updated: 2021/04/01 12:44:25 by leodauga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_ray
 
 typedef	struct	s_rc
 {
+	double	buff[3000];
 	double	camera;
 	double	dir_x;
 	double	dir_y;
@@ -161,8 +162,8 @@ typedef struct	s_file
 
 typedef struct s_sprite
 {
-	int 	pos_x[500];
-	int		pos_y[500];
+	double	pos_x[500];
+	double	pos_y[500];
 	int		nb_sprite;
 	double	corec_coef;
 	int		draw_start_y;
@@ -194,6 +195,8 @@ typedef struct	s_verif
 	int		old_map_y;
 	int		black_col;
 	int		side;
+	int		old_s_x;
+	int		old_s_y;
 }				t_verif;
 
 typedef	struct s_base

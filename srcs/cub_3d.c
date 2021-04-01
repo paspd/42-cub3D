@@ -6,7 +6,7 @@
 /*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 12:00:33 by ldauga            #+#    #+#             */
-/*   Updated: 2021/03/22 11:40:05 by leodauga         ###   ########.fr       */
+/*   Updated: 2021/04/01 13:04:33 by leodauga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -380,12 +380,6 @@ int	parsing_map_3(t_cub *cub)
 		x = 0;
 		while (cub->map.tab_map[y][x])
 		{
-			if (cub->map.tab_map[y][x] == '2')
-			{
-				cub->sprite.pos_x[cub->sprite.nb_sprite] = x;
-				cub->sprite.pos_y[cub->sprite.nb_sprite] = y;
-				cub->sprite.nb_sprite++;
-			}
 			if (ft_ischar("NSEW", cub->map.tab_map[y][x]))
 			{
 				if (cub->verif.spawn)
@@ -817,6 +811,21 @@ void	init_node_dist(t_cub *cub)
 	}
 }
 
+int	check_s(t_cub *cub)
+{
+	int	i;
+
+	i = 0;
+	while (i < cub->sprite.nb_sprite)
+	{
+		if ((int)(cub->sprite.pos_x[i] - 0.50) == cub->map.x)
+			if ((int)(cub->sprite.pos_y[i] - 0.50) == cub->map.y)
+				return (0);
+		i++;
+	}
+	return (1);
+}
+
 void	check_ray(t_cub *cub)
 {
 	cub->verif.wall = 0;
@@ -834,7 +843,15 @@ void	check_ray(t_cub *cub)
 				cub->map.y += cub->ray.step_y;
 				cub->verif.wall_side = 1;
 			}
-			if (ft_ischar("|$#", cub->map.tab_map[cub->map.y][cub->map.x]))
+			if (cub->map.tab_map[cub->map.y][cub->map.x] == '$' && check_s(cub))
+			{
+				cub->sprite.pos_x[cub->sprite.nb_sprite] = cub->map.x + 0.50;
+				cub->sprite.pos_y[cub->sprite.nb_sprite] = cub->map.y + 0.50;
+				cub->sprite.nb_sprite++;
+				cub->verif.old_s_x = cub->map.x;
+				cub->verif.old_s_y = cub->map.y;
+			}
+			if (ft_ischar("|#", cub->map.tab_map[cub->map.y][cub->map.x]))
 				cub->verif.wall = 1;
 		}
 		if (cub->verif.wall_side == 0)
@@ -1104,7 +1121,7 @@ void	check_direction(t_cub *cub)
 	mlx_string_put(cub->mlx.id, cub->wind.id, cub->wind.width / 2, cub->wind.height * 0.05, 0x00FFFFFF - cub->sky.color, dir);
 }
 
-void	draw_sprites(t_cub *cub, int s_screen)
+ /*void	draw_sprites(t_cub *cub)
 {
 	int	y_min;
 	int	y_max;
@@ -1114,9 +1131,9 @@ void	draw_sprites(t_cub *cub, int s_screen)
 	y_min = cub->sprite.draw_start_y;
 	y_max = cub->sprite.draw_end_y;
 	x_max = cub->sprite.draw_end_x;
-	while (y_min < y_max)
+	while (x_min < x_max)
 	{
-		cub->sprite.y = (int)(y_min - (-cub->s_img.width / 2 + s_screen) * cub->s_img.line_length / cub->s_img.width);
+		cub->sprite.x = 0;
 		x_min = cub->sprite.draw_start_x;
 		while (x_min < x_max)
 		{
@@ -1128,44 +1145,98 @@ void	draw_sprites(t_cub *cub, int s_screen)
 		y_min++;
 	}
 }
+*/
+
+int		check_s_dist(t_cub *cub, int i)
+{
+	double	vec_x;
+	double	vec_x_2;
+	double	vec_y;
+	double	vec_y_2;
+
+	vec_x = fabs(cub->player.x - cub->sprite.pos_x[i]);
+	vec_y = fabs(cub->player.y - cub->sprite.pos_y[i]);
+	vec_x_2 = fabs(cub->player.x - cub->sprite.pos_x[i + 1]);
+	vec_y_2 = fabs(cub->player.y - cub->sprite.pos_y[i + 1]);
+	if (sqrt(pow(vec_x, 2) + pow(vec_y, 2)) < sqrt(pow(vec_x_2, 2) + pow(vec_y_2, 2)))
+		return (1);
+	return (0);
+}
+
+void	sort_sprite(t_cub *cub)
+{
+	int	i;
+	double	temp;
+
+	i = 0;
+	while (i < cub->sprite.nb_sprite - 1)
+	{
+		if (check_s_dist(cub, i))
+		{
+			temp = cub->sprite.pos_x[i];
+			cub->sprite.pos_x[i] = cub->sprite.pos_x[i + 1];
+			cub->sprite.pos_x[i + 1] = temp;
+			temp = cub->sprite.pos_y[i];
+			cub->sprite.pos_y[i] = cub->sprite.pos_y[i + 1];
+			cub->sprite.pos_y[i + 1] = temp;
+			i = 0;
+		}
+		else
+			i++;
+	}
+}
 
 void	aff_sprite(t_cub *cub)
 {
 	int	i;
-	double	s_x;
-	double	s_y;
-	double	real_x;
-	double	real_y;
-	int		s_screen;
-	int		s_h;
-	int		s_w;
 
+	sort_sprite(cub);
 	i = 0;
-	while (i < cub->sprite.nb_sprite)
+	while (i <= cub->sprite.nb_sprite)
 	{
-		s_x = cub->sprite.pos_x[i] - cub->player.x;
-		s_y = cub->sprite.pos_y[i] - cub->player.y;
-		cub->sprite.corec_coef = 1.0 / (cub->rc.plane_x * cub->rc.dir_y - cub->rc.dir_x * cub->rc.plane_y);
-		real_x = cub->sprite.corec_coef * (cub->rc.dir_y * s_x - cub->rc.dir_x * s_y);
-		real_y = cub->sprite.corec_coef * (-cub->rc.plane_y * s_x + cub->rc.plane_x * s_y);
-		s_screen = (int)(cub->wind.width / 2 * (1 + real_x / real_y));
-		s_h = abs((int)(cub->wind.height / real_y));
-		cub->sprite.draw_start_y = -s_h / 2 + cub->wind.height / 2;
-		if (cub->sprite.draw_start_y < 0)
-			cub->sprite.draw_start_y = 0;
-		cub->sprite.draw_end_y = s_h / 2 + cub->wind.height / 2;
-		if (cub->sprite.draw_end_y >= cub->wind.width)
-			cub->sprite.draw_end_y = cub->wind.height - 1;
-		s_w = abs((int)(cub->wind.width / real_x));
-		cub->sprite.draw_start_x = -s_w / 2 + s_screen;
-		if (cub->sprite.draw_start_x < 0)
-		  cub->sprite.draw_start_x = 0;
-		cub->sprite.draw_end_x = s_w / 2 + s_screen;
-		if (cub->sprite.draw_end_x >= cub->wind.width)
-			cub->sprite.draw_end_x = cub->wind.width - 1;
-		draw_sprites(cub, s_screen);		
-		i++;
+		double spriteX = cub->sprite.pos_x[i] - cub->player.x;
+    	double spriteY = cub->sprite.pos_y[i] - cub->player.y;
+		double invDet = 1.0 / (cub->rc.plane_x * cub->rc.dir_y - cub->rc.dir_x * cub->rc.plane_y);
+		double transformX = invDet * (cub->rc.dir_y * spriteX - cub->rc.dir_x * spriteY);
+    	double transformY = invDet * (-cub->rc.plane_y * spriteX + cub->rc.plane_x * spriteY);
+		int spriteScreenX = (int)((cub->wind.width / 2) * (1 + transformX / transformY));
+      	int vMoveScreen = (int)(0.0 / transformY);
+		int spriteHeight = abs((int)(cub->wind.height / (transformY))) / 1;
+		int drawStartY = -spriteHeight / 2 + cub->wind.height / 2 + vMoveScreen;
+      	if(drawStartY < 0)
+		  drawStartY = 0;
+      	int drawEndY = spriteHeight / 2 + cub->wind.height / 2 + vMoveScreen;
+      	if(drawEndY >= cub->wind.height)
+		  drawEndY = cub->wind.height - 1;
+		int spriteWidth = abs((int)(cub->wind.height / (transformY))) / 1;
+    	int drawStartX = -spriteWidth / 2 + spriteScreenX;
+    	if(drawStartX < 0)
+			drawStartX = 0;
+    	int drawEndX = spriteWidth / 2 + spriteScreenX;
+    	if(drawEndX >= cub->wind.width)
+			drawEndX = cub->wind.width - 1;
+		int stripe = drawStartX;
+		int color;
+		while (stripe <= drawEndX)
+		{
+			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * cub->s_img.width / spriteWidth) / 256;
+			if(transformY > 0 && stripe >= 0 && stripe < cub->wind.width && transformY < cub->rc.buff[stripe])
+			{
+				int y = drawStartY;
+				while(y < drawEndY)
+        		{
+          			int d = (y- vMoveScreen) * 256 - cub->wind.height * 128 + spriteHeight * 128;
+          			int texY = ((d * cub->s_img.height) / spriteHeight) / 256;
+         			color = cub->s_img.addr[cub->s_img.width * texY + texX];
+          			if(color != 0x00FF0000 && (cub->s_img.width * texY + texX) < (cub->s_img.width * cub->s_img.height))
+					  	cub->rci.addr[y * cub->rci.line_length + stripe] = color;
+					y++;
+				}
+			}
+			stripe++;
 	}
+	i++;
+}
 }
 
 int	raycasting(t_cub *cub)
@@ -1190,12 +1261,21 @@ int	raycasting(t_cub *cub)
 			init_node_dist(cub);
 			check_ray(cub);
 			draw(cub, x);
+			cub->rc.buff[x] = cub->ray.dist_wall;
 			x++;
 		}
 		aff_sprite(cub);
 		aff_map_wind(cub);
 		mlx_put_image_to_window(cub->mlx.id, cub->wind.id, cub->rci.img, 0, 0);
 		check_direction(cub);
+		for (size_t i = 0; i < 500; i++)
+		{
+			cub->sprite.pos_x[i] = 0;
+			cub->sprite.pos_y[i] = 0;
+			cub->sprite.nb_sprite = 0;
+			cub->verif.old_s_x = 0;
+			cub->verif.old_s_y = 0;
+		}
 	}
 	return (1);
 }

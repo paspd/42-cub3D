@@ -1,17 +1,17 @@
 R 1024 720
-SO ./textures/sky_1.xpm
-NO ./textures/sky_1.xpm
-WE ./textures/sky_1.xpm
-EA ./textures/sky_1.xpm
+SO ./textures/wood.xpm
+NO ./textures/wood.xpm
+WE ./textures/wood.xpm
+EA ./textures/wood.xpm
 
 S ./textures/sprite.xpm
 C 0,2,47
 F 67,154,178
 
      11111                11111
-   110000011            110030011
+   110020011            110030011
   10000200001          10000000001
- 1000000000001111111111000000000001
+ 1000002000001111111111000000000001
  100000N000000000000000000002000001
  1000000000001111331111030000000001
   10000000001   1001   10000000001
