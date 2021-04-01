@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/23 11:22:49 by ldauga            #+#    #+#             */
-/*   Updated: 2021/01/27 16:36:27 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/03/23 09:56:44 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	ft_putstr(char *str)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	if (!str)

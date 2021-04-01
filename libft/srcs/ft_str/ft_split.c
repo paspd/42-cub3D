@@ -3,21 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/26 13:39:04 by ldauga            #+#    #+#             */
-/*   Updated: 2021/02/01 13:14:08 by leodauga         ###   ########.fr       */
+/*   Updated: 2021/03/23 09:36:08 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/libft.h"
 
-static char		**ft_malloc_tab(char **result, char *str,
-		char c, int size)
+static char	**ft_malloc_tab(char **result, char *str, char c, int size)
 {
-	int i;
-	int check;
-	int word_nb;
+	int	i;
+	int	check;
+	int	word_nb;
 
 	word_nb = 0;
 	i = 0;
@@ -30,20 +29,17 @@ static char		**ft_malloc_tab(char **result, char *str,
 			word_nb++;
 		i++;
 	}
-	if (!(result = (char **)malloc(sizeof(char*) * (word_nb + 1))))
-	{
-		errno = ENOMEM;
+	result = (char **)malloc(sizeof(char *) * (word_nb + 1));
+	if (!result)
 		return (NULL);
-	}
 	return (result);
 }
 
-static int		ft_malloc_str(char **result, char *str,
-		char c, int size)
+static int	ft_malloc_str(char **result, char *str, char c, int size)
 {
-	int i;
-	int k;
-	int big;
+	int	i;
+	int	k;
+	int	big;
 
 	i = 0;
 	k = 0;
@@ -54,22 +50,20 @@ static int		ft_malloc_str(char **result, char *str,
 			big++;
 		if (big > 0)
 		{
-			if (!(result[k++] = (char *)malloc(sizeof(char) * (big + 1))))
-			{
-				errno = ENOMEM;
+			result[k] = (char *)malloc(sizeof(char) * (big + 1));
+			if (!result[k++])
 				return (0);
-			}
 		}
 		i++;
 	}
 	return (1);
 }
 
-static void		ft_filling(char **result, char *str, char c, int size)
+static void	ft_filling(char **result, char *str, char c, int size)
 {
-	int i;
-	int index;
-	int tab;
+	int	i;
+	int	index;
+	int	tab;
 
 	i = 0;
 	tab = 0;
@@ -90,7 +84,7 @@ static void		ft_filling(char **result, char *str, char c, int size)
 	result[tab] = 0;
 }
 
-char			**ft_split(char *s, char c)
+char	**ft_split(char *s, char c)
 {
 	char	**result;
 	int		size;
@@ -102,11 +96,9 @@ char			**ft_split(char *s, char c)
 		return (NULL);
 	while (s[size])
 		size++;
-	if (!(result = ft_malloc_tab(result, s, c, size)))
-	{
-		errno = ENOMEM;
+	result = ft_malloc_tab(result, s, c, size);
+	if (!result)
 		return (NULL);
-	}
 	if (!(ft_malloc_str(result, s, c, size)))
 	{
 		i = 0;

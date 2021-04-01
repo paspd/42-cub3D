@@ -3,77 +3,65 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/12/02 12:54:53 by ldauga            #+#    #+#             */
-/*   Updated: 2021/02/02 10:50:41 by leodauga         ###   ########.fr       */
+/*   Updated: 2021/03/23 10:07:41 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../incs/libft.h"
 
-size_t		gnl_ft_strlen(const char *c)
+void	gnl_ft_strcpy(char *line, char *buffer, int len, int save)
 {
 	int	i;
 
-	if (!c)
-		return (0);
 	i = 0;
-	while (c[i])
-		i++;
-	return (i);
-}
-
-char		*gnl_ft_strjoin(char *s1, char *s2)
-{
-	int		i;
-	int		n;
-	char	*str;
-
-	if (!s2 || !s1)
-		return (0);
-	i = ft_strlen(s1) + ft_strlen(s2);
-	if (!(str = ft_calloc(sizeof(char), i + 1)))
-		return (0);
-	i = 0;
-	n = 0;
-	while (s1[i])
+	while (i < len)
 	{
-		str[n] = s1[i];
-		i++;
-		n++;
-	}
-	i = 0;
-	while (s2[i])
-		str[n++] = s2[i++];
-	str[n] = 0;
-	free(s1);
-	return (str);
-}
-
-void		gnl_ft_bzero(void *s, size_t n)
-{
-	int		i;
-	char	*str;
-
-	str = s;
-	i = 0;
-	while (n > 0)
-	{
-		str[i] = 0;
-		n--;
+		line[i] = buffer[save + i];
+		buffer[save + i] = 0;
 		i++;
 	}
+	buffer[save + i] = 0;
+	line[i] = '\0';
 }
 
-void		*gnl_ft_calloc(size_t count, size_t size)
+int	gnl_ft_strlen(char *buffer, int save)
 {
-	char	*str;
-	size_t	i;
+	int	len;
+
+	len = 0;
+	while (buffer[len + save] && buffer[len + save] != '\n')
+		len++;
+	return (len);
+}
+
+char	*gnl_ft_strjoin(char *line, char *buffer, int len, int save)
+{
+	int		i;
+	int		j;
+	int		ret_len;
+	char	*ret;
 
 	i = 0;
-	if (!(str = (char *)malloc(sizeof(char) * (count * size))))
-		return (0);
-	ft_bzero(str, (count * size));
-	return (str);
+	j = 0;
+	ret_len = gnl_ft_strlen(line, 0) + len;
+	ret = (char *)malloc(sizeof(char) * (ret_len + 1));
+	if (!ret)
+		return (NULL);
+	while (line[j])
+		ret[i++] = line[j++];
+	j = 0;
+	while (buffer[save + j] && buffer[save + j] != '\n')
+	{
+		ret[i] = buffer[save + j];
+		buffer[save + j] = 0;
+		i++;
+		j++;
+	}
+	buffer[save + j] = 0;
+	ret[i] = 0;
+	free(line);
+	return (ret);
 }

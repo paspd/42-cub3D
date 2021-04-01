@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/25 11:50:19 by ldauga            #+#    #+#             */
-/*   Updated: 2021/01/27 12:30:11 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/03/23 09:53:27 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,8 @@ void	*ft_calloc(size_t count, size_t size)
 	size_t	i;
 
 	i = 0;
-	if (!(str = (char *)malloc(sizeof(char) * (count * size))))
+	str = (char *)malloc(sizeof(char) * (count * size));
+	if (!str)
 		return (0);
 	ft_bzero(str, (count * size));
 	return (str);

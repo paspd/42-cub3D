@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/24 07:15:12 by ldauga            #+#    #+#             */
-/*   Updated: 2021/02/01 13:14:08 by leodauga         ###   ########.fr       */
+/*   Updated: 2021/03/23 09:39:38 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static int	ft_strlen2(char *c)
 {
-	int		i;
+	int	i;
 
 	i = 0;
 	while (c[i])
@@ -22,7 +22,7 @@ static int	ft_strlen2(char *c)
 	return (i);
 }
 
-size_t		ft_strlcat(char *s1, char *s2, size_t dstsize)
+size_t	ft_strlcat(char *s1, char *s2, size_t dstsize)
 {
 	size_t	i;
 	size_t	j;
