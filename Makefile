@@ -16,7 +16,8 @@ MINILIBX		=	libmlx.a
 LIB				=	libft/libft.a
 
 SRCS			=	srcs/cub_3d.c
-GENERATE_SRCS	=	srcs/map_for_cub.c
+GENERATE_SRCS	=	srcs/map_for_cub/map_for_cub_1.c \
+					srcs/map_for_cub/map_for_cub_2.c
 OBJS			=	${SRCS:.c=.o}
 GENERATE_OBJS	=	${GENERATE_SRCS:.c=.o}
 

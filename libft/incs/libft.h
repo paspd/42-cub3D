@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/11/23 16:28:25 by ldauga            #+#    #+#             */
-/*   Updated: 2021/03/23 10:21:44 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/04/01 15:41:34 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@
 # include <errno.h>
 # include <time.h>
 # include <math.h>
+# include <sys/types.h>
+# include <sys/wait.h>
 
 typedef struct s_list
 {

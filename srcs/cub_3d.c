@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub_3d.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 12:00:33 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/01 14:02:20 by leodauga         ###   ########.fr       */
+/*   Updated: 2021/04/01 15:52:20 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,6 @@ void	error(char *error_msg, t_cub *cub)
 	ft_close_files(cub->file.file_fd);
 	ft_putstr_color("Error\n", "\033[31m\033[1m");
 	ft_putstr_color(error_msg, "\033[38;5;166m");
-	// while(1);
 	exit(-1);
 }
 
@@ -269,7 +268,7 @@ void	parsing_sky_color_bis(t_cub *cub, char *line, int i)
 
 void	parsing_sky_color(t_cub *cub, char *line)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	cub->verif.pars++;
@@ -298,7 +297,8 @@ void	parsing_floor_color_bis(t_cub *cub, char *line, int i)
 		cub->floor.b = cub->floor.b * 10 + (line[i++] - 48);
 	if (cub->floor.r > 255 || cub->floor.g > 255 || cub->floor.b > 255)
 		error("The floor's color is not valid.\n", cub);
-	cub->floor.color = 256 * 256 * cub->floor.r + 256 * cub->floor.g + cub->floor.b;
+	cub->floor.color = 256 * 256 * cub->floor.r + 256 * \
+		cub->floor.g + cub->floor.b;
 }
 
 void	parsing_floor_color(t_cub *cub, char *line)
@@ -526,8 +526,8 @@ void	init_structs(char *path, t_cub *cub)
 	cub->base.dec = "0123456789";
 	cub->base.hex = "0123456789ABCDEF";
 	cub->verif.old_key = 2147483647;
-	cub->player.rotate_speed = 0.05;
-	cub->player.speed = 0.15;
+	cub->player.rotate_speed = 0.06;
+	cub->player.speed = 0.1;
 }
 
 void	free_all(t_cub *cub)
@@ -630,7 +630,6 @@ int	game_finish(t_cub *cub)
 	}
 	ft_close_files(cub->file.file_fd);
 	ft_putstr_color("Game finish.\n", "\033[38;5;166m");
-	while(1);
 	exit(1);
 }
 
@@ -1121,32 +1120,6 @@ void	check_direction(t_cub *cub)
 	mlx_string_put(cub->mlx.id, cub->wind.id, cub->wind.width / 2, cub->wind.height * 0.05, 0x00FFFFFF - cub->sky.color, dir);
 }
 
- /*void	draw_sprites(t_cub *cub)
-{
-	int	y_min;
-	int	y_max;
-	int	x_min;
-	int	x_max;
-	
-	y_min = cub->sprite.draw_start_y;
-	y_max = cub->sprite.draw_end_y;
-	x_max = cub->sprite.draw_end_x;
-	while (x_min < x_max)
-	{
-		cub->sprite.x = 0;
-		x_min = cub->sprite.draw_start_x;
-		while (x_min < x_max)
-		{
-			int d = x_min - cub->wind.height + cub->s_img.height;
-			cub->sprite.x = ((d * cub->s_img.line_length) / cub->s_img.height);
-			cub->rci.addr[y_min * cub->rci.line_length + x_min] = cub->s_img.addr[cub->sprite.y * cub->s_img.width + cub->sprite.x];
-			x_min++;
-		}
-		y_min++;
-	}
-}
-*/
-
 int		check_s_dist(t_cub *cub, int i)
 {
 	double	vec_x;
@@ -1186,10 +1159,22 @@ void	sort_sprite(t_cub *cub)
 	}
 }
 
+// void	init_sfi(t_cub *cub)
+// {
+// 	cub->sfi.img = mlx_new_image(cub->mlx.id, cub->wind.width, cub->wind.height);
+// 	if (!cub->sfi.img)
+// 		error( "MLX error.\n", cub);
+// 	cub->sfi.addr = (int *)mlx_get_data_addr(cub->sfi.img, &cub->sfi.bits_per_pixel, &cub->sfi.line_length, &cub->sfi.endian);
+// 	if (!cub->sfi.addr)
+// 		error("MLX error.\n", cub);
+// 	cub->sfi.line_length /= 4;
+// }
+
 void	aff_sprite(t_cub *cub)
 {
 	int	i;
 
+	// init_sfi(cub);
 	sort_sprite(cub);
 	i = 0;
 	while (i <= cub->sprite.nb_sprite)
@@ -1244,6 +1229,7 @@ int	raycasting(t_cub *cub)
 	int x;
 
 	x = 0;
+	usleep(10000);
 	if (cub->verif.full_map)
 		full_map(cub);
 	else
@@ -1266,7 +1252,9 @@ int	raycasting(t_cub *cub)
 		}
 		aff_sprite(cub);
 		aff_map_wind(cub);
+		mlx_clear_window(cub->mlx.id, cub->wind.id);
 		mlx_put_image_to_window(cub->mlx.id, cub->wind.id, cub->rci.img, 0, 0);
+		// mlx_destroy_image(cub->mlx.id, cub->sfi.img);
 		check_direction(cub);
 		cub->sprite.nb_sprite = 0;
 	}
@@ -1313,7 +1301,7 @@ int	key_press(int key, t_cub *cub)
 	if (key != cub->verif.old_key)
 		dprintf(1, "touche :%d\n", key);
 	cub->verif.old_key = key;
-	raycasting(cub);
+	// raycasting(cub);
 	return (0);
 }
 
@@ -1335,6 +1323,7 @@ int		key_release(int	key, t_cub *cub)
 		cub->move.right_arrow = 0;
 	if (key == 123 || key == 12)	
 		cub->move.left_arrow = 0;
+	// raycasting(cub);
 	return (1);
 }
 
@@ -1416,6 +1405,7 @@ void	start_graphic(t_cub	*cub)
 	mlx_hook(cub->wind.id, 2, 0, key_press, cub);
 	mlx_hook(cub->wind.id, 3, 1, key_release, cub);
 	mlx_hook(cub->wind.id, 17, 1, game_finish, cub);
+	mlx_loop_hook(cub->mlx.id, raycasting, cub);
 }
 
 int	parsing(char *path, t_cub *cub)

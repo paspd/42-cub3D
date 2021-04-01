@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 15:36:08 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/01 13:47:51 by leodauga         ###   ########.fr       */
+/*   Updated: 2021/04/01 15:21:53 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,7 +218,7 @@ typedef struct	s_cub
 	t_mlx		mlx;
 	t_floor		floor;
 	t_sky		sky;
-	t_base		base;
+	t_base		base;;
 	t_rci		rci;
 	t_ray		ray;
 	t_rc		rc;
@@ -231,6 +231,75 @@ typedef struct	s_cub
 	t_xpm_img	so;
 	t_xpm_img	s_img;
 	t_sprite	sprite;
+	t_rci		sfi;
 }				t_cub;
+
+void	error(char *error_msg, t_cub *cub);
+int		parsing_texture_sprite(t_cub *cub, char *line);
+int		parsing_texture_ea(t_cub *cub, char *line);
+int		parsing_texture_we(t_cub *cub, char *line);
+int		parsing_texture_so(t_cub *cub, char *line);
+int		parsing_texture_no(t_cub *cub, char *line);
+int		parsing_res(t_cub *cub, char *line);
+int		parsing_texture_check(char *line);
+int		ft_tablen(t_cub *cub);
+void	fill_flood_map(t_cub *cub, int y, int x);
+void	parsing_sky_color_bis(t_cub *cub, char *line, int i);
+void	parsing_sky_color(t_cub *cub, char *line);
+void	parsing_floor_color_bis(t_cub *cub, char *line, int i);
+void	parsing_floor_color(t_cub *cub, char *line);
+char	*ft_strjoin_cub(char *s1, char *s2);
+void	clean_map(t_cub *cub);
+int		parsing_map_3(t_cub *cub);
+int		parsing_map_2(t_cub *cub);
+void	check_coef_map(t_cub *cub);
+int		parsing_map(t_cub *cub, char **str);
+int		parsing_file(t_cub *cub);
+void	check_file_path(char *path, t_cub *cub);
+void	init_structs(char *path, t_cub *cub);
+void	free_all(t_cub *cub);
+void	aff_player(int c);
+void	aff_map(t_cub *cub);
+void	aff_all(t_cub *cub);
+int		game_finish(t_cub *cub);
+void	multiply_px_minimap(t_cub *cub, int color, int y, int x);
+void	multiply_px_player(t_cub *cub, int color, int y, int x);
+void	multiply_px_map(t_cub *cub, int color, int y, int x);
+void	up_key(t_cub *cub);
+void	down_key(t_cub *cub);
+void	left_key(t_cub *cub);
+void	right_key(t_cub *cub);
+void	aff_map_wind(t_cub *cub);
+void	init_node_dist(t_cub *cub);
+int		check_s(t_cub *cub);
+void	check_ray(t_cub *cub);
+void	select_texture(t_cub *cub);
+void	check_4_texture(t_cub *cub);
+void	draw_vertical_line(int x, int y_min, int y_max, t_cub *cub);
+void	draw(t_cub *cub, int x);
+void	left_arrow(t_cub *cub);
+void	right_arrow(t_cub *cub);
+void	init_vector(t_cub *cub);
+void	check_move(t_cub *cub);
+void	put_gray(t_cub *cub);
+void	full_map(t_cub *cub);
+void	check_direction(t_cub *cub);
+int		check_s_dist(t_cub *cub, int i);
+void	sort_sprite(t_cub *cub);
+void	aff_sprite(t_cub *cub);
+int		raycasting(t_cub *cub);
+int		key_press(int key, t_cub *cub);
+int		key_release(int	key, t_cub *cub);
+void	init_we(t_cub *cub);
+void	init_so(t_cub *cub);
+void	init_ea(t_cub *cub);
+void	init_no(t_cub *cub);
+void	init_sprite(t_cub *cub);
+void	init_final_img(t_cub *cub);
+void	init_img(t_cub *cub);
+void	start_graphic(t_cub	*cub);
+int		parsing(char *path, t_cub *cub);
+int		main(int argc, char *argv[]);
+
 
 #endif
