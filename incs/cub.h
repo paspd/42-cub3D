@@ -6,7 +6,7 @@
 /*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 15:36:08 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/01 12:44:25 by leodauga         ###   ########.fr       */
+/*   Updated: 2021/04/01 13:47:51 by leodauga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ typedef	struct s_player
 	int			spawn_direction;
 	double		y;
 	double		x;
+	double		spawn_x;
+	double		spawn_y;
 	double		speed;
 	double		rotate_speed;
 	int			jump;

@@ -6,7 +6,7 @@
 /*   By: leodauga <leodauga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 12:00:33 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/01 13:04:33 by leodauga         ###   ########.fr       */
+/*   Updated: 2021/04/01 14:02:20 by leodauga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -393,8 +393,8 @@ int	parsing_map_3(t_cub *cub)
 		}
 		y++;
 	}
-	// cub->sprite.pos_x[cub->sprite.nb_sprite] = 0;
-	// cub->sprite.pos_y[0] = 0;
+	cub->player.spawn_x = cub->player.x;
+	cub->player.spawn_y = cub->player.y;
 	if (!cub->verif.spawn)
 		error("There is no spawn point.\n", cub);
 	fill_flood_map(cub, cub->player.y, cub->player.x);
@@ -526,8 +526,8 @@ void	init_structs(char *path, t_cub *cub)
 	cub->base.dec = "0123456789";
 	cub->base.hex = "0123456789ABCDEF";
 	cub->verif.old_key = 2147483647;
-	cub->player.rotate_speed = 0.03;
-	cub->player.speed = 0.05;
+	cub->player.rotate_speed = 0.05;
+	cub->player.speed = 0.15;
 }
 
 void	free_all(t_cub *cub)
@@ -630,7 +630,7 @@ int	game_finish(t_cub *cub)
 	}
 	ft_close_files(cub->file.file_fd);
 	ft_putstr_color("Game finish.\n", "\033[38;5;166m");
-	// while(1);
+	while(1);
 	exit(1);
 }
 
@@ -1268,14 +1268,7 @@ int	raycasting(t_cub *cub)
 		aff_map_wind(cub);
 		mlx_put_image_to_window(cub->mlx.id, cub->wind.id, cub->rci.img, 0, 0);
 		check_direction(cub);
-		for (size_t i = 0; i < 500; i++)
-		{
-			cub->sprite.pos_x[i] = 0;
-			cub->sprite.pos_y[i] = 0;
-			cub->sprite.nb_sprite = 0;
-			cub->verif.old_s_x = 0;
-			cub->verif.old_s_y = 0;
-		}
+		cub->sprite.nb_sprite = 0;
 	}
 	return (1);
 }
@@ -1309,11 +1302,18 @@ int	key_press(int key, t_cub *cub)
 			cub->move.right_arrow = 1;
 		if (key == 123 || key == 12)
 			cub->move.left_arrow = 1;
+		if (key == 15)
+		{
+			cub->player.x = cub->player.spawn_x;
+			cub->player.y = cub->player.spawn_y;
+			init_vector(cub);
+		}
 		aff_map_wind(cub);
 	}
 	if (key != cub->verif.old_key)
 		dprintf(1, "touche :%d\n", key);
 	cub->verif.old_key = key;
+	raycasting(cub);
 	return (0);
 }
 
@@ -1416,7 +1416,6 @@ void	start_graphic(t_cub	*cub)
 	mlx_hook(cub->wind.id, 2, 0, key_press, cub);
 	mlx_hook(cub->wind.id, 3, 1, key_release, cub);
 	mlx_hook(cub->wind.id, 17, 1, game_finish, cub);
-	mlx_loop_hook(cub->mlx.id, raycasting, cub);
 }
 
 int	parsing(char *path, t_cub *cub)
