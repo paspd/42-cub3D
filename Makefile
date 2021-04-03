@@ -15,9 +15,28 @@ NAME			=	cub3D
 MINILIBX		=	libmlx.a
 LIB				=	libft/libft.a
 
-SRCS			=	srcs/cub_3d.c
-GENERATE_SRCS	=	srcs/map_for_cub/map_for_cub_1.c \
-					srcs/map_for_cub/map_for_cub_2.c
+SRCS			=	srcs/cub_3d.c \
+					srcs/init.c \
+					srcs/init_texture_img.c \
+					srcs/parsing_texture.c \
+					srcs/parsing_map_1.c \
+					srcs/parsing_map_2.c \
+					srcs/parsing_color.c \
+					srcs/aff.c \
+					srcs/arrow.c \
+					srcs/full_map.c \
+					srcs/mini_map.c \
+					srcs/move.c \
+					srcs/raycast.c \
+					srcs/screen_shoot.c \
+					srcs/aff_sprite.c \
+					srcs/check_key.c \
+					srcs/draw.c \
+					srcs/parsing.c \
+					srcs/check.c \
+					srcs/exit.c
+GENERATE_SRCS	=	srcs/mfc/map_for_cub.c \
+					srcs/mfc/map_for_cub_utilis.c
 OBJS			=	${SRCS:.c=.o}
 GENERATE_OBJS	=	${GENERATE_SRCS:.c=.o}
 

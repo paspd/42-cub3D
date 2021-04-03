@@ -1,8 +1,8 @@
-R 1024 720
-SO ./textures/wood.xpm
-NO ./textures/wood.xpm
-WE ./textures/wood.xpm
-EA ./textures/wood.xpm
+R 1080 720
+SO ./textures/sky_1.xpm
+NO ./textures/sky_1.xpm
+WE ./textures/sky_1.xpm
+EA ./textures/sky_1.xpm
 
 S ./textures/sprite.xpm
 C 0,2,47

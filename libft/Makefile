@@ -68,6 +68,7 @@ SRCS_FILES	=	convert/ft_atoi.c \
 				ft_str/ft_strtrim.c \
 				ft_str/ft_split.c \
 				ft_str/ft_strmapi.c \
+				ft_str/ft_strcmp.c \
 				write/ft_putchar_fd.c \
 				write/ft_putstr_fd.c \
 				write/ft_putnbr_fd.c \

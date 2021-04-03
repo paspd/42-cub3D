@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 15:36:08 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/01 15:21:53 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/04/03 14:18:53 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,7 +190,6 @@ typedef struct	s_verif
 	int		full_map;
 	int		img;
 	int		speed_hack;
-	int		screen_shoot;
 	int		shadow;
 	char	*coord;
 	int		old_map_x;
@@ -199,6 +198,7 @@ typedef struct	s_verif
 	int		side;
 	int		old_s_x;
 	int		old_s_y;
+	int		save;
 }				t_verif;
 
 typedef	struct s_base
@@ -263,7 +263,6 @@ void	aff_map(t_cub *cub);
 void	aff_all(t_cub *cub);
 int		game_finish(t_cub *cub);
 void	multiply_px_minimap(t_cub *cub, int color, int y, int x);
-void	multiply_px_player(t_cub *cub, int color, int y, int x);
 void	multiply_px_map(t_cub *cub, int color, int y, int x);
 void	up_key(t_cub *cub);
 void	down_key(t_cub *cub);
@@ -300,6 +299,7 @@ void	init_img(t_cub *cub);
 void	start_graphic(t_cub	*cub);
 int		parsing(char *path, t_cub *cub);
 int		main(int argc, char *argv[]);
+void	screen_shoot(t_cub *cub);
 
 
 #endif
