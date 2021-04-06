@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 14:07:47 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/03 14:07:56 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/04/05 10:18:32 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,22 @@ void	aff_player(int c)
 		printf("\033[38;5;166m◄\033[0m");
 }
 
+void	aff_map_utilis(char c)
+{
+	if (ft_ischar(" ", c))
+		printf("\033[31m░\033[0m");
+	else if (c == '|')
+		printf("\033[34m█\033[0m");
+	else if (c == '#')
+		printf("\033[32m█\033[0m");
+	else if (c == '.')
+		printf("\033[38;5;128m┼\033[0m");
+	else if (c == '$')
+		printf("\033[33m☺\033[0m");
+	else if (ft_ischar("NSEW", c))
+		aff_player(c);
+}
+
 void	aff_map(t_cub *cub)
 {
 	int	x;
@@ -35,18 +51,7 @@ void	aff_map(t_cub *cub)
 		x = 0;
 		while (cub->map.tab_map[y][x])
 		{
-			if (ft_ischar(" ", cub->map.tab_map[y][x]))
-				printf("\033[31m░\033[0m");
-			else if (cub->map.tab_map[y][x] == '|') 
-				printf("\033[34m█\033[0m");
-			else if (cub->map.tab_map[y][x] == '#') 
-				printf("\033[32m█\033[0m");
-			else if (cub->map.tab_map[y][x] == '.')
-				printf("\033[38;5;128m┼\033[0m");
-			else if (cub->map.tab_map[y][x] == '$')
-				printf("\033[33m☺\033[0m");
-			else if (ft_ischar("NSEW", cub->map.tab_map[y][x]))
-				aff_player(cub->map.tab_map[y][x]);
+			aff_map_utilis(cub->map.tab_map[y][x]);
 			x++;
 		}
 		printf("\n");
@@ -64,7 +69,8 @@ void	aff_all(t_cub *cub)
 	printf("S: \"%s\"\n", cub->texture.texture_sprite);
 	printf("F: %d,%d,%d\n", cub->floor.r, cub->floor.g, cub->floor.b);
 	printf("C: %d,%d,%d\n", cub->sky.r, cub->sky.g, cub->sky.b);
-	printf("\n\nCOLORS\n    sky : %d\n    floor : %d\n", cub->sky.color, cub->floor.color);
+	printf("\n\nCOLORS\n    sky : %d\n    floor : %d\n", \
+		cub->sky.color, cub->floor.color);
 	printf("player spawn direction :%c\n", cub->player.spawn_direction);
 	printf("spawn : [%d;%d]\n", (int)cub->player.y, (int)cub->player.x);
 	aff_map(cub);

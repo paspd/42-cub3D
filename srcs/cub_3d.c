@@ -6,12 +6,11 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/02/04 12:00:33 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/03 14:36:22 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/04/05 11:12:54 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../incs/cub.h"
-
 
 void	start_graphic(t_cub	*cub)
 {
@@ -24,38 +23,31 @@ void	start_graphic(t_cub	*cub)
 	mlx_loop_hook(cub->mlx.id, raycasting, cub);
 }
 
-int	parsing(char *path, t_cub *cub)
+int	parsing(t_cub *cub)
 {
-	init_structs(path, cub);
 	parsing_file(cub);
 	return (0);
 }
 
 int	main(int argc, char *argv[])
 {
-	t_cub cub;
+	t_cub	cub;
 
+	init_structs((char *)argv[1], &cub);
 	if (argc == 2 || (argc == 3 && !ft_strcmp(argv[2], "--save")))
-		parsing((char *)argv[1], &cub);
+		parsing(&cub);
 	else if (argc < 2)
-	{
-		ft_putstr("\033[31m\033[1mERROR: \033[0m");
-		ft_putstr("\033[38;5;166mVeuillez entrer en argument ");
-		ft_putstr("le path d'une carte\033[0m");
-		exit (-1);
-	}
+		error("U must put a map's file path.\n", &cub);
 	else if (argc > 2)
-	{
-		ft_putstr("\033[31m\033[1mERROR: \033[0m");
-		ft_putstr("\033[38;5;166mVeuillez entrer en argument ");
-		ft_putstr("un seul path de carte\033[0m");
-		exit (-1);
-	}
+		error("U must one map's file path (or --save).\n", &cub);
 	if (argc == 3 && !ft_strcmp(argv[2], "--save"))
 		cub.verif.save = 1;
-	if (!(cub.mlx.id = mlx_init()))
+	cub.mlx.id = mlx_init();
+	if (!cub.mlx.id)
 		error("MLX error.\n", &cub);
-	if (!(cub.wind.id = mlx_new_window(cub.mlx.id, cub.wind.width, cub.wind.height, "Cub3D")))
+	cub.wind.id = mlx_new_window(cub.mlx.id, cub.wind.width, \
+		cub.wind.height, "Cub3D");
+	if (!cub.wind.id)
 		error("MLX error.\n", &cub);
 	aff_all(&cub);
 	start_graphic(&cub);

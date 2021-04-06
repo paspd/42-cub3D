@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 15:36:08 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/03 14:18:53 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/04/05 10:37:41 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,7 +297,7 @@ void	init_sprite(t_cub *cub);
 void	init_final_img(t_cub *cub);
 void	init_img(t_cub *cub);
 void	start_graphic(t_cub	*cub);
-int		parsing(char *path, t_cub *cub);
+int		parsing(t_cub *cub);
 int		main(int argc, char *argv[]);
 void	screen_shoot(t_cub *cub);
 

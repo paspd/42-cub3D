@@ -63,6 +63,12 @@ generate:	compilation $(GENERATE_OBJS)
 				@./generate_map $(X) $(Y) >> maps/generated_map.cub
 				@rm -rf ./generate_map
 
+norme:
+		norminette $(SRCS)
+
+norme_all:
+			norminette $(SRCS) $(GENERATE_SRCS)
+
 gcc_not_flag:	$(OBJS)
 				@$(CC) -Lmlx -lmlx -framework OpenGL -framework AppKit -I $(INCLUDES) $(LIB) $(OBJS) -o $(NAME)
 				@cp mlx/libmlx.dylib .
