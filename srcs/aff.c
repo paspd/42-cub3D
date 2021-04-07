@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 14:07:47 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/05 10:18:32 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/04/07 09:15:22 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,4 +74,15 @@ void	aff_all(t_cub *cub)
 	printf("player spawn direction :%c\n", cub->player.spawn_direction);
 	printf("spawn : [%d;%d]\n", (int)cub->player.y, (int)cub->player.x);
 	aff_map(cub);
+}
+
+void	draw_sprite_2(t_afs *afs, t_cub *cub, int y, int stripe)
+{
+	afs->d = (y - afs->v_move_scre) * 256 - cub->wind.height * \
+		128 + afs->spr_hei * 128;
+	afs->tex_y = ((afs->d * cub->s_img.height) / afs->spr_hei) / 256;
+	afs->color = cub->s_img.addr[cub->s_img.width * afs->tex_y + afs->tex_x];
+	if (afs->color != 0x00FF0000 && (cub->s_img.width * afs->tex_y + \
+		afs->tex_x) < (cub->s_img.width * cub->s_img.height))
+		cub->rci.addr[y * cub->rci.line_length + stripe] = afs->color;
 }

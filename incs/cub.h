@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/27 15:36:08 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/05 10:37:41 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/04/07 09:26:11 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 typedef struct s_move
 {
 	int	left_arrow;
-	int right_arrow;
+	int	right_arrow;
 	int	left;
 	int	right;
 	int	up;
@@ -27,7 +27,7 @@ typedef struct s_move
 	int	open_door;
 }				t_move;
 
-typedef	struct	s_mlx
+typedef struct s_mlx
 {
 	void	*id;
 }				t_mlx;
@@ -52,7 +52,7 @@ typedef struct s_ray
 	double	dist_wall;
 }				t_ray;
 
-typedef	struct	s_rc
+typedef struct s_rc
 {
 	double	buff[3000];
 	double	camera;
@@ -62,7 +62,7 @@ typedef	struct	s_rc
 	double	plane_y;
 }				t_rc;
 
-typedef	struct	s_texture
+typedef struct s_texture
 {
 	char	*texture_sprite;
 
@@ -70,7 +70,7 @@ typedef	struct	s_texture
 	char	*so_texture;
 	char	*we_texture;
 	char	*ea_texture;
-	
+
 	double	coef_y;
 	double	coef_x;
 	double	texture_pos;
@@ -80,7 +80,7 @@ typedef	struct	s_texture
 	int		y;
 }				t_texture;
 
-typedef	struct s_player
+typedef struct s_player
 {
 	int			spawn_direction;
 	double		y;
@@ -93,24 +93,24 @@ typedef	struct s_player
 	char		*actual_pos;
 }				t_player;
 
-typedef	struct s_sky
+typedef struct s_sky
 {
 	int			color;
 	int			r;
 	int			g;
 	int			b;
-	void        *img;
-	int	        *addr;
-    int         bits_per_pixel;
-    int         line_length;
-    int         endian;
+	void		*img;
+	int			*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
 	int			width;
 	int			height;
 	double		coef_x;
 	double		coef_y;
 }				t_sky;
 
-typedef	struct s_floor
+typedef struct s_floor
 {
 	int		color;
 	int		r;
@@ -118,27 +118,27 @@ typedef	struct s_floor
 	int		b;
 }				t_floor;
 
-typedef struct  s_xpm_img
+typedef struct s_xpm_img
 {
-    void        *img;
-    int	        *addr;
-    int         bits_per_pixel;
-    int         line_length;
-    int         endian;
+	void		*img;
+	int			*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
 	int			width;
 	int			height;
-}               t_xpm_img;
+}				t_xpm_img;
 
-typedef struct  s_rci
+typedef struct s_rci
 {
-    void        *img;
-    int	        *addr;
-    int         bits_per_pixel;
-    int         line_length;
-    int         endian;
-}               t_rci;
+	void		*img;
+	int			*addr;
+	int			bits_per_pixel;
+	int			line_length;
+	int			endian;
+}				t_rci;
 
-typedef	struct	s_map
+typedef struct s_map
 {
 	char	**tab_map;
 	int		x;
@@ -149,14 +149,14 @@ typedef	struct	s_map
 	int		y_full_map_coef;
 }				t_map;
 
-typedef	struct	s_wind
+typedef struct s_wind
 {
 	void	*id;
 	int		height;
 	int		width;
 }				t_wind;
 
-typedef struct	s_file
+typedef struct s_file
 {
 	char	*file_path;
 	int		file_fd;
@@ -176,8 +176,7 @@ typedef struct s_sprite
 	int		x;
 }				t_sprite;
 
-
-typedef struct	s_verif
+typedef struct s_verif
 {
 	int		pars;
 	int		spawn;
@@ -199,15 +198,44 @@ typedef struct	s_verif
 	int		old_s_x;
 	int		old_s_y;
 	int		save;
+	int		gnl;
 }				t_verif;
 
-typedef	struct s_base
+typedef struct s_base
 {
 	char	*dec;
 	char	*hex;
 }				t_base;
 
-typedef struct	s_cub
+typedef struct s_mpx
+{
+	int	temp_color;
+	int	tx;
+	int	ty;
+	int	mx;
+	int	my;
+}				t_mpx;
+
+typedef struct s_afs
+{
+	double	sprite_x;
+	double	sprite_y;
+	double	inv_det;
+	double	transform_x;
+	double	transform_y;
+	int		spr_screen_x;
+	int		v_move_scre;
+	int		spr_hei;
+	t_draw	draw_x;
+	t_draw	draw_y;
+	int		spr_wid;
+	int		color;
+	int		tex_x;
+	int		d;
+	int		tex_y;
+}				t_afs;
+
+typedef struct s_cub
 {
 	t_file		file;
 	t_wind		wind;
@@ -218,7 +246,7 @@ typedef struct	s_cub
 	t_mlx		mlx;
 	t_floor		floor;
 	t_sky		sky;
-	t_base		base;;
+	t_base		base;
 	t_rci		rci;
 	t_ray		ray;
 	t_rc		rc;
@@ -232,6 +260,8 @@ typedef struct	s_cub
 	t_xpm_img	s_img;
 	t_sprite	sprite;
 	t_rci		sfi;
+	t_mpx		m;
+	t_afs		afs;
 }				t_cub;
 
 void	error(char *error_msg, t_cub *cub);
@@ -250,8 +280,8 @@ void	parsing_floor_color_bis(t_cub *cub, char *line, int i);
 void	parsing_floor_color(t_cub *cub, char *line);
 char	*ft_strjoin_cub(char *s1, char *s2);
 void	clean_map(t_cub *cub);
-int		parsing_map_3(t_cub *cub);
-int		parsing_map_2(t_cub *cub);
+void	parsing_map_3(t_cub *cub);
+void	parsing_map_2(t_cub *cub);
 void	check_coef_map(t_cub *cub);
 int		parsing_map(t_cub *cub, char **str);
 int		parsing_file(t_cub *cub);
@@ -300,6 +330,11 @@ void	start_graphic(t_cub	*cub);
 int		parsing(t_cub *cub);
 int		main(int argc, char *argv[]);
 void	screen_shoot(t_cub *cub);
-
+void	norm(t_cub *cub);
+void	move_2(t_cub *cub);
+void	parsing_map_4(t_cub *cub);
+void	check_rayca(t_cub *cub, int x);
+void	check_ray_bis(t_cub *cub);
+void	draw_sprite_2(t_afs *afs, t_cub *cub, int y, int stripe);
 
 #endif

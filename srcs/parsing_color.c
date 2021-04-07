@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 14:03:54 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/03 14:04:54 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/04/06 13:27:15 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	parsing_floor_color_bis(t_cub *cub, char *line, int i)
 
 void	parsing_floor_color(t_cub *cub, char *line)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	cub->verif.pars++;
@@ -79,4 +79,20 @@ void	parsing_floor_color(t_cub *cub, char *line)
 	while (ft_isdigit(line[i]) && line[i])
 		cub->floor.g = cub->floor.g * 10 + (line[i++] - 48);
 	parsing_floor_color_bis(cub, line, i);
+}
+
+void	norm(t_cub *cub)
+{
+	cub->rc.plane_x = 0;
+	cub->rc.plane_y = 0.66;
+	if (cub->player.spawn_direction == 'E')
+	{
+		cub->rc.dir_x = 1;
+		cub->rc.dir_y = 0;
+	}
+	else
+	{
+		cub->rc.dir_x = -1;
+		cub->rc.dir_y = 0;
+	}
 }

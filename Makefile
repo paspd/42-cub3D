@@ -27,6 +27,7 @@ SRCS			=	srcs/cub_3d.c \
 					srcs/full_map.c \
 					srcs/mini_map.c \
 					srcs/move.c \
+					srcs/move_2.c \
 					srcs/raycast.c \
 					srcs/screen_shoot.c \
 					srcs/aff_sprite.c \
@@ -34,6 +35,7 @@ SRCS			=	srcs/cub_3d.c \
 					srcs/draw.c \
 					srcs/parsing.c \
 					srcs/check.c \
+					srcs/check_2.c \
 					srcs/exit.c
 GENERATE_SRCS	=	srcs/mfc/map_for_cub.c \
 					srcs/mfc/map_for_cub_utilis.c
@@ -62,12 +64,6 @@ generate:	compilation $(GENERATE_OBJS)
 				@$(CC) $(CFLAGS) -I $(INCLUDES) $(LIB) $(GENERATE_OBJS) -o generate_map
 				@./generate_map $(X) $(Y) >> maps/generated_map.cub
 				@rm -rf ./generate_map
-
-norme:
-		norminette $(SRCS)
-
-norme_all:
-			norminette $(SRCS) $(GENERATE_SRCS)
 
 gcc_not_flag:	$(OBJS)
 				@$(CC) -Lmlx -lmlx -framework OpenGL -framework AppKit -I $(INCLUDES) $(LIB) $(OBJS) -o $(NAME)

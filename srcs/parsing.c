@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 14:33:56 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/03 14:36:23 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/04/06 13:45:16 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,14 +55,14 @@ int	parsing_texture_check(char *line)
 
 int	parsing_file(t_cub *cub)
 {
-	int		verif;
 	char	*line;
 
 	line = NULL;
 	cub->file.file_fd = ft_open_files(cub->file.file_path);
-	while ((verif = get_next_line(cub->file.file_fd, &line)))
+	while (cub->verif.gnl)
 	{
-		if (verif < 0)
+		cub->verif.gnl = get_next_line(cub->file.file_fd, &line);
+		if (cub->verif.gnl < 0)
 			error("The path of the map is not valid.\n", cub);
 		if (ft_strnchr(line, 'R', 1))
 			parsing_res(cub, line);
@@ -76,9 +76,8 @@ int	parsing_file(t_cub *cub)
 			break ;
 		free(line);
 	}
-	if (verif == 0 && cub->verif.pars != 8)
+	if (cub->verif.pars != 8)
 		error("Some elements are missing.\n", cub);
-	if (cub->verif.pars == 8)
-		parsing_map(cub, &line);
+	parsing_map(cub, &line);
 	return (0);
 }

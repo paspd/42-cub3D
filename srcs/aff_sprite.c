@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 14:23:12 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/03 14:30:10 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/04/07 09:14:51 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 void	sort_sprite(t_cub *cub)
 {
-	int	i;
+	int		i;
 	double	temp;
 
 	i = 0;
@@ -50,55 +50,72 @@ int	check_s(t_cub *cub)
 	return (1);
 }
 
+void	calcul_sprite(t_afs *afs, t_cub *cub)
+{
+	afs->spr_hei = abs((int)(cub->wind.height / (afs->transform_y))) / 1;
+	afs->draw_y.draw_start = -afs->spr_hei / 2 + \
+		cub->wind.height / 2 + afs->v_move_scre;
+	if (afs->draw_y.draw_start < 0)
+		afs->draw_y.draw_start = 0;
+	afs->draw_y.draw_end = afs->spr_hei / 2 + cub->wind.height / 2 + \
+		afs->v_move_scre;
+	if (afs->draw_y.draw_end >= cub->wind.height)
+		afs->draw_y.draw_end = cub->wind.height - 1;
+	afs->spr_wid = abs((int)(cub->wind.height / (afs->transform_y))) / 1;
+	afs->draw_x.draw_start = -afs->spr_wid / 2 + afs->spr_screen_x;
+	if (afs->draw_x.draw_start < 0)
+		afs->draw_x.draw_start = 0;
+	afs->draw_x.draw_end = afs->spr_wid / 2 + afs->spr_screen_x;
+	if (afs->draw_x.draw_end >= cub->wind.width)
+		afs->draw_x.draw_end = cub->wind.width - 1;
+}
+
+void	draw_sprite(t_afs *afs, t_cub *cub)
+{
+	int	y;
+	int	stripe;
+
+	stripe = afs->draw_x.draw_start;
+	while (stripe <= afs->draw_x.draw_end)
+	{
+		afs->tex_x = (int)(256 * (stripe - (-afs->spr_wid / 2 + \
+			afs->spr_screen_x)) * cub->s_img.width / afs->spr_wid) / 256;
+		if (afs->transform_y > 0 && stripe >= 0 && stripe < \
+			cub->wind.width && afs->transform_y < cub->rc.buff[stripe])
+		{
+			y = afs->draw_y.draw_start;
+			while (y < afs->draw_y.draw_end)
+			{
+				draw_sprite_2(afs, cub, y, stripe);
+				y++;
+			}
+		}
+		stripe++;
+	}
+}
+
 void	aff_sprite(t_cub *cub)
 {
-	int	i;
+	int		i;
+	t_afs	afs;
 
 	sort_sprite(cub);
 	i = 0;
 	while (i <= cub->sprite.nb_sprite)
 	{
-		double spriteX = cub->sprite.pos_x[i] - cub->player.x;
-    	double spriteY = cub->sprite.pos_y[i] - cub->player.y;
-		double invDet = 1.0 / (cub->rc.plane_x * cub->rc.dir_y - cub->rc.dir_x * cub->rc.plane_y);
-		double transformX = invDet * (cub->rc.dir_y * spriteX - cub->rc.dir_x * spriteY);
-    	double transformY = invDet * (-cub->rc.plane_y * spriteX + cub->rc.plane_x * spriteY);
-		int spriteScreenX = (int)((cub->wind.width / 2) * (1 + transformX / transformY));
-      	int vMoveScreen = (int)(0.0 / transformY);
-		int spriteHeight = abs((int)(cub->wind.height / (transformY))) / 1;
-		int drawStartY = -spriteHeight / 2 + cub->wind.height / 2 + vMoveScreen;
-      	if(drawStartY < 0)
-		  drawStartY = 0;
-      	int drawEndY = spriteHeight / 2 + cub->wind.height / 2 + vMoveScreen;
-      	if(drawEndY >= cub->wind.height)
-		  drawEndY = cub->wind.height - 1;
-		int spriteWidth = abs((int)(cub->wind.height / (transformY))) / 1;
-    	int drawStartX = -spriteWidth / 2 + spriteScreenX;
-    	if(drawStartX < 0)
-			drawStartX = 0;
-    	int drawEndX = spriteWidth / 2 + spriteScreenX;
-    	if(drawEndX >= cub->wind.width)
-			drawEndX = cub->wind.width - 1;
-		int stripe = drawStartX;
-		int color;
-		while (stripe <= drawEndX)
-		{
-			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX)) * cub->s_img.width / spriteWidth) / 256;
-			if(transformY > 0 && stripe >= 0 && stripe < cub->wind.width && transformY < cub->rc.buff[stripe])
-			{
-				int y = drawStartY;
-				while(y < drawEndY)
-        		{
-          			int d = (y- vMoveScreen) * 256 - cub->wind.height * 128 + spriteHeight * 128;
-          			int texY = ((d * cub->s_img.height) / spriteHeight) / 256;
-         			color = cub->s_img.addr[cub->s_img.width * texY + texX];
-          			if(color != 0x00FF0000 && (cub->s_img.width * texY + texX) < (cub->s_img.width * cub->s_img.height))
-					  	cub->rci.addr[y * cub->rci.line_length + stripe] = color;
-					y++;
-				}
-			}
-			stripe++;
+		afs.sprite_x = cub->sprite.pos_x[i] - cub->player.x;
+		afs.sprite_y = cub->sprite.pos_y[i] - cub->player.y;
+		afs.inv_det = 1.0 / (cub->rc.plane_x * cub->rc.dir_y - \
+			cub->rc.dir_x * cub->rc.plane_y);
+		afs.transform_x = afs.inv_det * (cub->rc.dir_y * afs.sprite_x - \
+			cub->rc.dir_x * afs.sprite_y);
+		afs.transform_y = afs.inv_det * (-cub->rc.plane_y * afs.sprite_x + \
+			cub->rc.plane_x * afs.sprite_y);
+		afs.spr_screen_x = (int)((cub->wind.width / 2) * (1 + afs.transform_x / \
+			afs.transform_y));
+		afs.v_move_scre = (int)(0.0 / afs.transform_y);
+		calcul_sprite(&afs, cub);
+		draw_sprite(&afs, cub);
+		i++;
 	}
-	i++;
-}
 }

@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 14:34:47 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/05 10:32:23 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/04/06 13:50:30 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,17 @@ int	ft_tablen(t_cub *cub)
 	while (cub->map.tab_map[i])
 		i++;
 	return (i);
+}
+
+void	check_rayca(t_cub *cub, int x)
+{
+	cub->rc.camera = 2 * x / (double)cub->wind.width - 1;
+	cub->ray.dir_x = cub->rc.dir_x + cub->rc.plane_x * cub->rc.camera;
+	cub->ray.dir_y = cub->rc.dir_y + cub->rc.plane_y * cub->rc.camera;
+	cub->map.x = (int)cub->player.x;
+	cub->map.y = (int)cub->player.y;
+	cub->ray.delta_dist_x = fabs(1 / cub->ray.dir_x);
+	cub->ray.delta_dist_y = fabs(1 / cub->ray.dir_y);
 }
 
 void	check_file_path(char *path, t_cub *cub)

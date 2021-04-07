@@ -6,17 +6,16 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 13:49:49 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/03 13:56:10 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/04/06 13:34:36 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../incs/cub.h"
 
 int	parsing_texture_sprite(t_cub *cub, char *line)
 {
-	int		i;
-	int		n;
+	int	i;
+	int	n;
 
 	i = 1;
 	if (ft_strnstr(line, "S", 1))
@@ -41,8 +40,8 @@ int	parsing_texture_sprite(t_cub *cub, char *line)
 
 int	parsing_texture_ea(t_cub *cub, char *line)
 {
-	int		i;
-	int		n;
+	int	i;
+	int	n;
 
 	i = 1;
 	if (ft_strnstr(line, "EA", 2))
@@ -69,8 +68,8 @@ int	parsing_texture_ea(t_cub *cub, char *line)
 
 int	parsing_texture_we(t_cub *cub, char *line)
 {
-	int		i;
-	int		n;
+	int	i;
+	int	n;
 
 	i = 1;
 	if (ft_strnstr(line, "WE", 2))
@@ -97,8 +96,8 @@ int	parsing_texture_we(t_cub *cub, char *line)
 
 int	parsing_texture_so(t_cub *cub, char *line)
 {
-	int		i;
-	int		n;
+	int	i;
+	int	n;
 
 	i = 1;
 	if (ft_strnstr(line, "SO", 2))
@@ -125,8 +124,8 @@ int	parsing_texture_so(t_cub *cub, char *line)
 
 int	parsing_texture_no(t_cub *cub, char *line)
 {
-	int		i;
-	int		n;
+	int	i;
+	int	n;
 
 	i = 1;
 	if (ft_strnstr(line, "NO", 2))

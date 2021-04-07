@@ -6,10 +6,9 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 13:57:17 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/03 14:01:36 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/04/06 13:33:05 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
-
 
 #include "../incs/cub.h"
 
@@ -32,7 +31,7 @@ void	clean_map(t_cub *cub)
 	}
 }
 
-int	parsing_map_3(t_cub *cub)
+void	parsing_map_3(t_cub *cub)
 {
 	int	x;
 	int	y;
@@ -56,16 +55,10 @@ int	parsing_map_3(t_cub *cub)
 		}
 		y++;
 	}
-	cub->player.spawn_x = cub->player.x;
-	cub->player.spawn_y = cub->player.y;
-	if (!cub->verif.spawn)
-		error("There is no spawn point.\n", cub);
-	fill_flood_map(cub, cub->player.y, cub->player.x);
-	clean_map(cub);
-	return (0);
+	parsing_map_4(cub);
 }
 
-int	parsing_map_2(t_cub *cub)
+void	parsing_map_2(t_cub *cub)
 {
 	int	i;
 	int	n;
@@ -83,12 +76,11 @@ int	parsing_map_2(t_cub *cub)
 		i++;
 	}
 	parsing_map_3(cub);
-	return (0);
 }
 
 void	check_coef_map(t_cub *cub)
 {
-	int y;
+	int	y;
 	int	longest_line;
 
 	longest_line = 0;

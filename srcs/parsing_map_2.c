@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 14:01:40 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/03 14:02:56 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/04/06 14:05:02 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ char	*ft_strjoin_cub(char *s1, char *s2)
 	if (!s1 || !s2)
 		return (0);
 	i = ft_strlen(s1) + ft_strlen(s2);
-	if (!(str = malloc(sizeof(char) * i + 2)))
+	str = malloc(sizeof(char) * i + 2);
+	if (!str)
 		return (0);
 	i = 0;
 	n = 0;
@@ -62,4 +63,14 @@ void	fill_flood_map(t_cub *cub, int y, int x)
 	fill_flood_map(cub, y + 1, x);
 	fill_flood_map(cub, y, x - 1);
 	fill_flood_map(cub, y, x + 1);
+}
+
+void	parsing_map_4(t_cub *cub)
+{
+	cub->player.spawn_x = cub->player.x;
+	cub->player.spawn_y = cub->player.y;
+	if (!cub->verif.spawn)
+		error("There is no spawn point.\n", cub);
+	fill_flood_map(cub, cub->player.y, cub->player.x);
+	clean_map(cub);
 }

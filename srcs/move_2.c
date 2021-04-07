@@ -1,23 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strcmp.c                                        :+:      :+:    :+:   */
+/*   move_2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/04/02 12:29:41 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/07 09:16:28 by ldauga           ###   ########lyon.fr   */
+/*   Created: 2021/04/06 13:23:08 by ldauga            #+#    #+#             */
+/*   Updated: 2021/04/06 13:26:42 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../incs/libft.h"
+#include "../incs/cub.h"
 
-int	ft_strcmp(char *s1, char *s2)
+void	move_2(t_cub *cub)
 {
-	int	i;
-
-	i = 0;
-	while (s1[i] == s2[i] && (s1[i] || s2[i]))
-		i++;
-	return (s1[i] - s2[i]);
+	if (cub->move.right_arrow)
+	{
+		if (ft_ischar("NE", cub->player.spawn_direction))
+			right_arrow(cub);
+		else
+			left_arrow(cub);
+	}
+	if (cub->move.up)
+		up_key(cub);
+	if (cub->move.down)
+		down_key(cub);
+	if (cub->move.left)
+		right_key(cub);
+	if (cub->move.right)
+		left_key(cub);
 }

@@ -6,7 +6,7 @@
 /*   By: ldauga <ldauga@student.42lyon.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/04/03 14:08:53 by ldauga            #+#    #+#             */
-/*   Updated: 2021/04/06 12:48:19 by ldauga           ###   ########lyon.fr   */
+/*   Updated: 2021/04/06 13:20:39 by ldauga           ###   ########lyon.fr   */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,39 +67,30 @@ void	full_map(t_cub *cub)
 	mlx_put_image_to_window(cub->mlx.id, cub->wind.id, cub->rci.img, 0, 0);
 }
 
-int	multiply_px_map_bis(t_cub *cub, int y, int x, int temp_color)
-{
-	if (ft_ischar("|$#", cub->map.tab_map[y][x]))
-		return (0x00222222);
-	if (x == (int)cub->player.x && y == (int)cub->player.y)
-		return (0x00FFFFFF);
-	return (temp_color);
-}
-
 void	multiply_px_map(t_cub *cub, int color, int y, int x)
 {
-	int	temp_color;
-	int	tx;
-	int	ty;
-	int	mx;
-	int	my;
-
-	temp_color = color;
-	ty = cub->map.y_full_map_coef * y;
-	my = ty + cub->map.y_full_map_coef;
-	while (ty < my)
+	cub->m.temp_color = color;
+	cub->m.ty = cub->map.y_full_map_coef * y;
+	cub->m.my = cub->m.ty + cub->map.y_full_map_coef;
+	while (cub->m.ty < cub->m.my)
 	{
-		tx = cub->map.x_full_map_coef * x;
-		mx = tx + cub->map.x_full_map_coef;
-		while (tx < mx)
+		cub->m.tx = cub->map.x_full_map_coef * x;
+		cub->m.mx = cub->m.tx + cub->map.x_full_map_coef;
+		while (cub->m.tx < cub->m.mx)
 		{
-			color = temp_color;
-			if (tx == cub->map.x_full_map_coef * x || tx == mx - 1 || \
-				ty == cub->map.y_full_map_coef * y || ty == my - 1)
-				multiply_px_map_bis(cub, y, x, temp_color);
-			cub->rci.addr[ty * cub->rci.line_length + tx] = color;
-			tx++;
+			color = cub->m.temp_color;
+			if (cub->m.tx == cub->map.x_full_map_coef * x || cub->m.tx == cub->m.mx - 1 || \
+				cub->m.ty == cub->map.y_full_map_coef * y \
+					|| cub->m.ty == cub->m.my - 1)
+			{
+				if (ft_ischar("|$#", cub->map.tab_map[y][x]))
+					color = 0x00222222;
+				if (x == (int)cub->player.x && y == (int)cub->player.y)
+					color = 0x00FFFFFF;
+			}
+			cub->rci.addr[cub->m.ty * cub->rci.line_length + cub->m.tx] = color;
+			cub->m.tx++;
 		}
-		ty++;
+		cub->m.ty++;
 	}
 }
